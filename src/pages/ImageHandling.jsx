@@ -6,8 +6,10 @@ import Image2 from '../assets/Image2.jpg';
 import Image3 from '../assets/Image3.jpg';
 import Image4 from '../assets/Image4.webp';
 import Image5 from '../assets/Image5.webp';
+import NavBar from './NavBar';
 
 function ImageHandling() {
+    
   const slides = [
     { src: Image1, alt: "Image 1" },
     { src: Image2, alt: "Image 2" },

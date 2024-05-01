@@ -11,7 +11,7 @@ import StateProp from "./pages/StateProp";
 import Styling from "./pages/Styling";
 import Forms from "./pages/Forms";
 import AuthPages from "./pages/AuthPages";
-import NavBar from "./pages/NavBar";
+
 
 
 
@@ -20,8 +20,7 @@ function App() {
     <Router>
     
       <Routes>
-      <Route element={<AuthPages />}>
-        <Route path="/" element={<NavBar/>}/>
+      <Route path= "/"element={<AuthPages />}>
         <Route path="/crud" element={<Crud />} />
         <Route path="/data-display" element={<DataDisplay />} />
         <Route path="/data-manipulation" element={<DataManu />} />
