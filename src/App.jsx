@@ -13,12 +13,9 @@ import Forms from "./pages/Forms";
 import AuthPages from "./pages/AuthPages";
 
 
-
-
 function App() {
   return (
     <Router>
-    
       <Routes>
       <Route path= "/"element={<AuthPages />}>
         <Route path="/crud" element={<Crud />} />
