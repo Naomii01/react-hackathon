@@ -6,7 +6,7 @@ import Image2 from '../assets/Image2.jpg';
 import Image3 from '../assets/Image3.jpg';
 import Image4 from '../assets/Image4.webp';
 import Image5 from '../assets/Image5.webp';
-import NavBar from './NavBar';
+
 
 function ImageHandling() {
     
@@ -39,7 +39,7 @@ function ImageHandling() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       nextSlide();
-    }, 4000); // Change 5000 to the desired interval in milliseconds
+    }, 4000); 
     return () => clearInterval(intervalId);
   }, [currentIndex]);
 
@@ -47,11 +47,15 @@ function ImageHandling() {
     <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
       <div style={{ backgroundImage: `url(${slides[currentIndex].src})` }} className='w-full h-full rounded-2xl bg-center bg-cover duration-500'>
       </div>
+
       {/* Left Arrow */}
+
       <div className='absolute top-[50%] transform -translate-y-1/2 left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
         <BsChevronCompactLeft onClick={prevSlide} size={30} />
       </div>
+
       {/* Right Arrow */}
+      
       <div className='absolute top-[50%] transform -translate-y-1/2 right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
         <BsChevronCompactRight onClick={nextSlide} size={30} />
       </div>
