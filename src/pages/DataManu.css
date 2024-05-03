@@ -1,10 +1,4 @@
-*{
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI";
-    box-sizing: border-box;
-}
-.DataManu{
+.DataManu {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,41 +6,58 @@
 }
 
 .table-container {
-	width: 50%;
+    width: 50%;
 }
 
 .table-container table {
-	border-collapse: collapse;
-	width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 table thead {
-	background-color: #bbb;
+    background-color: #bbb;
 }
 
 table th,
 table td {
-	padding: 10px;
-	text-align: left;
-	min-width: 150px;
+    padding: 10px;
+    text-align: left;
+    min-width: 150px;
 }
 
 table th {
-	color: #121212;
+    color: #121212;
 }
 
 tr {
-	border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
 }
+
 .search-container {
-	margin: 1rem 0;
-	width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    width: 50%;
 }
 
 .search-container input {
-	width: 100%;
-	padding: 10px;
-	font-size: 1rem;
-	outline: none;
-	border: 1px solid #ccc;
+    width: calc(50% - 5px);
+    padding: 10px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 600px) {
+    input[type="text"],
+    .MuiFormControl-root,
+    .MuiSelect-root {
+        width: 100%;
+    }
+
+    .MuiSelect-root {
+        margin-top: 10px;
+    }
 }
