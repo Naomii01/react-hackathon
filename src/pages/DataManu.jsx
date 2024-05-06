@@ -55,10 +55,19 @@ function DataManu() {
     setSearchPhrase(event.target.value);
   };
 
-  const filterByGender = (event) => {
-    const filteredUsers = originalUsers.filter((user) => user.gender === event.target.value);
-    setUsers(filteredUsers);
-    setFilterOption(event.target.value);
+  const filterByOption = (event) => {
+    const selectedOption = event.target.value;
+    setFilterOption(selectedOption);
+
+    if (selectedOption === "all") {
+      setUsers(originalUsers);
+    } else if (selectedOption === "name") {
+      const filteredUsers = originalUsers.map(user => ({ id: user.id, name: user.name }));
+      setUsers(filteredUsers);
+    } else if (selectedOption === "email") {
+      const filteredUsers = originalUsers.map(user => ({ id: user.id, email: user.email }));
+      setUsers(filteredUsers);
+    }
   };
 
   const renderUsers = () => {
@@ -66,9 +75,8 @@ function DataManu() {
       return (
         <tr key={user.id}>
           <td>{user.id}</td>
-          <td>{user.name}</td>
-          <td>{user.email}</td>
-          <td>{user.gender}</td>
+          {filterOption !== "email" && <td>{user.name}</td>}
+          {filterOption !== "name" && <td>{user.email}</td>}
         </tr>
       );
     });
@@ -90,16 +98,16 @@ function DataManu() {
         />
         <Select
           value={filterOption}
-          onChange={filterByGender}
+          onChange={filterByOption}
           displayEmpty
-          inputProps={{ "aria-label": "Filter by gender" }}
+          inputProps={{ "aria-label": "Filter by option" }}
         >
           <MenuItem value="" disabled>
-            Filter by Gender
+            Filter by Option
           </MenuItem>
-          <MenuItem value="male">Male</MenuItem>
-          <MenuItem value="female">Female</MenuItem>
-          <MenuItem value="other">Other</MenuItem>
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="name">Name</MenuItem>
+          <MenuItem value="email">Email</MenuItem>
         </Select>
       </div>
       <div className="table-container">
@@ -110,16 +118,13 @@ function DataManu() {
                 <span style={{ marginRight: 10 }}>Id</span>
                 {sorted.sorted === "id" && renderArrow()}
               </th>
-              <th onClick={sortByName}>
+              {filterOption !== "email" && <th onClick={sortByName}>
                 <span style={{ marginRight: 10 }}>Name</span>
                 {sorted.sorted === "name" && renderArrow()}
-              </th>
-              <th>
+              </th>}
+              {filterOption !== "name" && <th>
                 <span>Email</span>
-              </th>
-              <th>
-                <span>Gender</span>
-              </th>
+              </th>}
             </tr>
           </thead>
           <tbody>{renderUsers()}</tbody>
