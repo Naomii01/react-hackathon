@@ -1,6 +1,5 @@
-import React from "react";
-import { useState } from "react";
-import { data } from "../users";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./DataManu.css";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
@@ -8,19 +7,33 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 function DataManu() {
-  const [users, setUsers] = useState(data);
+  const [users, setUsers] = useState([]);
+  const [originalUsers, setOriginalUsers] = useState([]);
   const [sorted, setSorted] = useState({ sorted: "id", reversed: false });
   const [searchPhrase, setSearchPhrase] = useState("");
   const [filterOption, setFilterOption] = useState("");
+
+  useEffect(() => {
+    axios.get("https://jsonplaceholder.typicode.com/users")
+      .then(response => {
+        setUsers(response.data);
+        setOriginalUsers(response.data); // Save original data
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, []); // Empty dependency array to fetch data only once when the component mounts
+
+  const resetListAndFilter = () => {
+    setUsers(originalUsers); // Reset list
+    setFilterOption(""); // Change filtering criteria
+  };
 
   const sortById = () => {
     setSorted({ sorted: "id", reversed: !sorted.reversed });
     const usersCopy = [...users];
     usersCopy.sort((userA, userB) => {
-      if (sorted.reversed) {
-        return userA.id - userB.id;
-      }
-      return userB.id - userA.id;
+      return sorted.reversed ? userB.id - userA.id : userA.id - userB.id;
     });
     setUsers(usersCopy);
   };
@@ -29,31 +42,21 @@ function DataManu() {
     setSorted({ sorted: "name", reversed: !sorted.reversed });
     const usersCopy = [...users];
     usersCopy.sort((userA, userB) => {
-      const fullNameA = `${userA.first_name} ${userA.last_name}`;
-      const fullNameB = `${userB.first_name} ${userB.last_name}`;
-
-      if (sorted.reversed) {
-        return fullNameB.localeCompare(fullNameA);
-      }
-
-      return fullNameA.localeCompare(fullNameB);
+      return sorted.reversed ? userB.name.localeCompare(userA.name) : userA.name.localeCompare(userB.name);
     });
-
     setUsers(usersCopy);
   };
 
   const search = (event) => {
-    const matchedUsers = data.filter((user) => {
-      return `${user.first_name} ${user.last_name}`
-        .toLowerCase()
-        .includes(event.target.value.toLowerCase());
+    const matchedUsers = originalUsers.filter((user) => {
+      return user.name.toLowerCase().includes(event.target.value.toLowerCase());
     });
     setUsers(matchedUsers);
     setSearchPhrase(event.target.value);
   };
 
   const filterByGender = (event) => {
-    const filteredUsers = data.filter((user) => user.gender === event.target.value);
+    const filteredUsers = originalUsers.filter((user) => user.gender === event.target.value);
     setUsers(filteredUsers);
     setFilterOption(event.target.value);
   };
@@ -63,7 +66,7 @@ function DataManu() {
       return (
         <tr key={user.id}>
           <td>{user.id}</td>
-          <td>{`${user.first_name} ${user.last_name}`}</td>
+          <td>{user.name}</td>
           <td>{user.email}</td>
           <td>{user.gender}</td>
         </tr>
@@ -72,10 +75,7 @@ function DataManu() {
   };
 
   const renderArrow = () => {
-    if (sorted.reversed) {
-      return <FaArrowUp />;
-    }
-    return <FaArrowDown />;
+    return sorted.reversed ? <FaArrowUp /> : <FaArrowDown />;
   };
 
   return (
@@ -86,7 +86,7 @@ function DataManu() {
           variant="outlined"
           value={searchPhrase}
           onChange={search}
-        
+          onClear={resetListAndFilter} // Add onClear event to reset list and filter
         />
         <Select
           value={filterOption}
@@ -97,9 +97,9 @@ function DataManu() {
           <MenuItem value="" disabled>
             Filter by Gender
           </MenuItem>
-          <MenuItem value="Male">Male</MenuItem>
-          <MenuItem value="Female">Female</MenuItem>
-          <MenuItem value="Other">Other</MenuItem>
+          <MenuItem value="male">Male</MenuItem>
+          <MenuItem value="female">Female</MenuItem>
+          <MenuItem value="other">Other</MenuItem>
         </Select>
       </div>
       <div className="table-container">
@@ -108,11 +108,11 @@ function DataManu() {
             <tr>
               <th onClick={sortById}>
                 <span style={{ marginRight: 10 }}>Id</span>
-                {sorted.sorted === "id" ? renderArrow() : null}
+                {sorted.sorted === "id" && renderArrow()}
               </th>
               <th onClick={sortByName}>
                 <span style={{ marginRight: 10 }}>Name</span>
-                {sorted.sorted === "name" ? renderArrow() : null}
+                {sorted.sorted === "name" && renderArrow()}
               </th>
               <th>
                 <span>Email</span>
