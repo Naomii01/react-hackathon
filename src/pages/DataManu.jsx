@@ -17,16 +17,16 @@ function DataManu() {
     axios.get("https://jsonplaceholder.typicode.com/users")
       .then(response => {
         setUsers(response.data);
-        setOriginalUsers(response.data); // Save original data
+        setOriginalUsers(response.data);
       })
       .catch(error => {
         console.error("Error fetching data:", error);
       });
-  }, []); // Empty dependency array to fetch data only once when the component mounts
+  }, []); 
 
   const resetListAndFilter = () => {
-    setUsers(originalUsers); // Reset list
-    setFilterOption(""); // Change filtering criteria
+    setUsers(originalUsers);
+    setFilterOption(""); 
   };
 
   const sortById = () => {
@@ -94,7 +94,7 @@ function DataManu() {
           variant="outlined"
           value={searchPhrase}
           onChange={search}
-          onClear={resetListAndFilter} // Add onClear event to reset list and filter
+          onClear={resetListAndFilter} 
         />
         <Select
           value={filterOption}
